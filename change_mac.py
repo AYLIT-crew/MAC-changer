@@ -1,4 +1,4 @@
-import subprocess, time
+import subprocess, time, sys
 from termcolor import colored
 from pyfiglet import figlet_format
 
@@ -11,6 +11,10 @@ def format_add(mac):
         else:
             new_mac += mac[i]+':'
     return new_mac
+
+def check_if_mac_avail(mac):
+    data = subprocess.check_output(f'ifconfig hw ether {mac}'.split(' ')).decode().split('\n')
+
 
 #function to give interfaces available
 def check_interfaces():
@@ -40,10 +44,14 @@ def main(ma, i):
     time.sleep(2)
     try:
         command = f'sudo ifconfig {i} hw ether {ma}'
-        subprocess.call(command, shell=True)
+        subprocess.check_output(command.split())
         print(colored('Command successful', 'green'))
     except:
-        print(colored('Unexpected error!', 'red'))
+        print(colored('MAC not available', 'red'))
+        subprocess.call(f'sudo ifconfig {i} up', shell=True)
+        print('-'*10)
+        print(colored('Interface up  again', 'green'))
+        sys.exit()
     print(colored('-'*20, 'red'))
     time.sleep(2)
     try:
@@ -65,11 +73,6 @@ while True:
     print(colored('-'*60, 'red'))
     print(colored(figlet_format('Change MAC')+'\n\t-A MAC address changer program\n\t-An AYLIT production', 'red'))
     print(colored('-'*60, 'red'))
-
-    #get input
-    cont = input(colored('Continue the program(y/n)? ', 'red')).lower().strip()
-    if cont == 'n':
-        break
     mac_address = input(colored('Enter a 12 character length string:', 'red')).strip()
     interface = input(colored("Enter the interface for which the MAC address should be changed to(type 'getinterfaces' to get a list of interfaces available):", 'red'))
     if interface == 'getinterfaces':
@@ -82,3 +85,6 @@ while True:
         main(mac_address, interface)
     else:
         main(mac_address, interface)
+    cont = input(colored('Press enter to quit', 'red'))
+    if cont == '':
+        break
