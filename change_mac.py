@@ -10,9 +10,7 @@ def check_root():
 
 if not check_root():
     print(cl('You must be root to run this program.', 'red'))
-    cont = input(cl('Press enter to continue'))
-    if cont == '':
-        sys.exit()
+    sys.exit()
 
 def format_add(mac):
     new_mac = ''
@@ -69,9 +67,19 @@ def main(ma, i):
 
 while True:
     subprocess.call('clear', shell=True)
-    print(cl('-'*60, 'red'))
-    print(cl(figlet_format('Change MAC')+'\n\t-A MAC address changer program\n\t-An AYLIT production', 'red'))
-    print(cl('-'*60, 'red'))
+    print(cl('''
+   █████████  █████                                             ██████   ██████   █████████     █████████ 
+  ███░░░░░███░░███                                             ░░██████ ██████   ███░░░░░███   ███░░░░░███
+ ███     ░░░  ░███████    ██████   ████████    ███████  ██████  ░███░█████░███  ░███    ░███  ███     ░░░ 
+░███          ░███░░███  ░░░░░███ ░░███░░███  ███░░███ ███░░███ ░███░░███ ░███  ░███████████ ░███         
+░███          ░███ ░███   ███████  ░███ ░███ ░███ ░███░███████  ░███ ░░░  ░███  ░███░░░░░███ ░███         
+░░███     ███ ░███ ░███  ███░░███  ░███ ░███ ░███ ░███░███░░░   ░███      ░███  ░███    ░███ ░░███     ███
+ ░░█████████  ████ █████░░████████ ████ █████░░███████░░██████  █████     █████ █████   █████ ░░█████████ 
+  ░░░░░░░░░  ░░░░ ░░░░░  ░░░░░░░░ ░░░░ ░░░░░  ░░░░░███ ░░░░░░  ░░░░░     ░░░░░ ░░░░░   ░░░░░   ░░░░░░░░░  
+                                              ███ ░███                                                    
+                                             ░░██████                                                     
+                                              ░░░░░░                                                                   ''', 'red'))
+   
     mac_address = input(cl('Enter a 12 character length string:', 'red')).strip()
     interface = input(cl("Enter interface whose MAC should be changed(use 'getifaces' command to get interfaces):", 'red'))
     if interface == 'getifaces':
@@ -85,9 +93,7 @@ while True:
     else:
         if check_if_mac_avail(mac_address, interface) == None:
             print(cl('MAC address not available', 'red'))
-            cont = input(cl('Press enter to continue', 'red'))
-            if cont == '':
-                sys.exit()
+            sys.exit()
         main(mac_address, interface)
     cont = input(cl('Press enter to quit', 'red'))
     if cont == '':
